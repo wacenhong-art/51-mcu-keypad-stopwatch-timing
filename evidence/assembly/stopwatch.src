@@ -1,0 +1,384 @@
+; C:/Users/ROG/Documents/Codex/2026-11-02/new-chat/work/exp2_stopwatch.src generated from: stopwatch.c
+; COMPILER INVOKED BY:
+;        D:\keil-C51\C51\BIN\C51.exe stopwatch.c SRC(C:/Users/ROG/Documents/Codex/2026-11-02/new-chat/work/exp2_stopwatch.src)
+
+
+NAME	STOPWATCH
+
+?PR?_sw_reset?STOPWATCH                  SEGMENT CODE 
+?PR?_sw_digit?STOPWATCH                  SEGMENT CODE 
+?DT?_sw_digit?STOPWATCH                  SEGMENT DATA OVERLAYABLE 
+?PR?_sw_confirm?STOPWATCH                SEGMENT CODE 
+?PR?_sw_control?STOPWATCH                SEGMENT CODE 
+?PR?_sw_tick?STOPWATCH                   SEGMENT CODE 
+	EXTRN	CODE (?C?ISTPTR)
+	EXTRN	CODE (?C?ISTOPTR)
+	EXTRN	CODE (?C?CSTOPTR)
+	EXTRN	CODE (?C?CLDOPTR)
+	EXTRN	CODE (?C?ILDPTR)
+	EXTRN	CODE (?C?IMUL)
+	EXTRN	CODE (?C?CILDOPTR)
+	EXTRN	CODE (?C?ILDOPTR)
+	EXTRN	CODE (?C?IILDOPTR)
+	PUBLIC	_sw_tick
+	PUBLIC	_sw_control
+	PUBLIC	_sw_confirm
+	PUBLIC	_sw_digit
+	PUBLIC	_sw_reset
+
+	RSEG  ?DT?_sw_digit?STOPWATCH
+?_sw_digit?BYTE:
+      digit?142:   DS   1
+; #include "stopwatch.h"
+; void sw_reset(volatile Stopwatch *s)
+
+	RSEG  ?PR?_sw_reset?STOPWATCH
+_sw_reset:
+	USING	0
+			; SOURCE LINE # 2
+;---- Variable 's?040' assigned to Register 'R1/R2/R3' ----
+; {
+			; SOURCE LINE # 3
+;     s->target=0;s->elapsed=0;s->blink_ms=0;
+			; SOURCE LINE # 4
+	CLR  	A
+	MOV  	B,A
+	LCALL	?C?ISTPTR
+	MOV  	DPTR,#02H
+	CLR  	A
+	MOV  	B,A
+	LCALL	?C?ISTOPTR
+	MOV  	DPTR,#04H
+	CLR  	A
+	MOV  	B,A
+	LCALL	?C?ISTOPTR
+;     s->state=SW_INPUT;s->count=0;s->sub_ms=0;
+			; SOURCE LINE # 5
+	MOV  	DPTR,#06H
+	CLR  	A
+	LCALL	?C?CSTOPTR
+	MOV  	DPTR,#07H
+	CLR  	A
+	LCALL	?C?CSTOPTR
+	MOV  	DPTR,#08H
+	CLR  	A
+	LCALL	?C?CSTOPTR
+;     s->overflow=0;s->matched=0;s->blink_on=1;
+			; SOURCE LINE # 6
+	MOV  	DPTR,#09H
+	CLR  	A
+	LCALL	?C?CSTOPTR
+	MOV  	DPTR,#0AH
+	CLR  	A
+	LCALL	?C?CSTOPTR
+	MOV  	DPTR,#0BH
+	MOV  	A,#01H
+	LJMP 	?C?CSTOPTR
+; END OF _sw_reset
+
+; }
+; void sw_digit(volatile Stopwatch *s,u8 digit)
+
+	RSEG  ?PR?_sw_digit?STOPWATCH
+_sw_digit:
+	USING	0
+			; SOURCE LINE # 8
+	MOV  	digit?142,R5
+;---- Variable 's?141' assigned to Register 'R1/R2/R3' ----
+; {
+			; SOURCE LINE # 9
+;     if(s->state==SW_INPUT && s->count<4 && digit<10) {
+			; SOURCE LINE # 10
+	MOV  	DPTR,#06H
+	LCALL	?C?CLDOPTR
+	JNZ  	?C0003
+	MOV  	DPTR,#07H
+	LCALL	?C?CLDOPTR
+	CLR  	C
+	SUBB 	A,#04H
+	JNC  	?C0003
+	MOV  	A,digit?142
+	CLR  	C
+	SUBB 	A,#0AH
+	JNC  	?C0003
+;         s->target=s->target*10+digit;++s->count;
+			; SOURCE LINE # 11
+	LCALL	?C?ILDPTR
+	MOV  	R7,A
+	MOV  	R6,B
+	MOV  	R4,#00H
+	MOV  	R5,#0AH
+	LCALL	?C?IMUL
+	MOV  	A,R7
+	ADD  	A,digit?142
+	MOV  	R7,A
+	MOV  	A,R4
+	ADDC 	A,R6
+	MOV  	B,R7
+	LCALL	?C?ISTPTR
+	MOV  	DPTR,#07H
+	MOV  	A,#01H
+	LCALL	?C?CILDOPTR
+;     }
+			; SOURCE LINE # 12
+; }
+			; SOURCE LINE # 13
+?C0003:
+	RET  	
+; END OF _sw_digit
+
+; void sw_confirm(volatile Stopwatch *s)
+
+	RSEG  ?PR?_sw_confirm?STOPWATCH
+_sw_confirm:
+	USING	0
+			; SOURCE LINE # 14
+;---- Variable 's?243' assigned to Register 'R1/R2/R3' ----
+; {
+			; SOURCE LINE # 15
+;     if(s->state==SW_INPUT && s->count==4) s->state=SW_READY;
+			; SOURCE LINE # 16
+	MOV  	DPTR,#06H
+	LCALL	?C?CLDOPTR
+	JNZ  	?C0005
+	MOV  	DPTR,#07H
+	LCALL	?C?CLDOPTR
+	CJNE 	A,#04H,?C0005
+	MOV  	DPTR,#06H
+	MOV  	A,#01H
+	LCALL	?C?CSTOPTR
+; }
+			; SOURCE LINE # 17
+?C0005:
+	RET  	
+; END OF _sw_confirm
+
+; void sw_control(volatile Stopwatch *s)
+
+	RSEG  ?PR?_sw_control?STOPWATCH
+_sw_control:
+	USING	0
+			; SOURCE LINE # 18
+;---- Variable 's?344' assigned to Register 'R1/R2/R3' ----
+; {
+			; SOURCE LINE # 19
+;     if(s->state==SW_READY) {
+			; SOURCE LINE # 20
+	MOV  	DPTR,#06H
+	LCALL	?C?CLDOPTR
+	XRL  	A,#01H
+	JNZ  	?C0006
+;         s->elapsed=0;s->sub_ms=0;s->overflow=0;
+			; SOURCE LINE # 21
+	MOV  	DPTR,#02H
+	MOV  	B,A
+	LCALL	?C?ISTOPTR
+	MOV  	DPTR,#08H
+	CLR  	A
+	LCALL	?C?CSTOPTR
+	MOV  	DPTR,#09H
+	CLR  	A
+	LCALL	?C?CSTOPTR
+;         s->matched=0;s->blink_ms=0;s->blink_on=1;
+			; SOURCE LINE # 22
+	MOV  	DPTR,#0AH
+	CLR  	A
+	LCALL	?C?CSTOPTR
+	MOV  	DPTR,#04H
+	CLR  	A
+	MOV  	B,A
+	LCALL	?C?ISTOPTR
+	MOV  	DPTR,#0BH
+	MOV  	A,#01H
+	LCALL	?C?CSTOPTR
+;         s->state=SW_RUNNING;
+			; SOURCE LINE # 23
+	MOV  	DPTR,#06H
+	MOV  	A,#02H
+;     } else if(s->state==SW_RUNNING) {
+			; SOURCE LINE # 24
+	LJMP 	?C0027
+?C0006:
+	MOV  	DPTR,#06H
+	LCALL	?C?CLDOPTR
+	XRL  	A,#02H
+	JNZ  	?C0008
+;         s->state=SW_STOPPED;
+			; SOURCE LINE # 25
+	MOV  	DPTR,#06H
+	MOV  	A,#03H
+	LCALL	?C?CSTOPTR
+;         s->matched=(!s->overflow && s->elapsed==s->target);
+			; SOURCE LINE # 26
+	MOV  	DPTR,#09H
+	LCALL	?C?CLDOPTR
+	JNZ  	?C0009
+	MOV  	DPTR,#02H
+	LCALL	?C?ILDOPTR
+	MOV  	R7,A
+	MOV  	R6,B
+	LCALL	?C?ILDPTR
+	CJNE 	A,AR7,?C0009
+	MOV  	A,R6
+	CJNE 	A,B,?C0009
+	MOV  	R7,#01H
+	SJMP 	?C0010
+?C0009:
+	MOV  	R7,#00H
+?C0010:
+	MOV  	DPTR,#0AH
+	MOV  	A,R7
+	LCALL	?C?CSTOPTR
+;         s->blink_ms=0;s->blink_on=1;
+			; SOURCE LINE # 27
+	MOV  	DPTR,#04H
+	CLR  	A
+	MOV  	B,A
+	LCALL	?C?ISTOPTR
+	MOV  	DPTR,#0BH
+	MOV  	A,#01H
+?C0026:
+;     } else if(s->state==SW_STOPPED) {
+			; SOURCE LINE # 28
+	SJMP 	?C0027
+?C0008:
+	MOV  	DPTR,#06H
+	LCALL	?C?CLDOPTR
+	XRL  	A,#03H
+	JNZ  	?C0013
+;         s->elapsed=0;s->sub_ms=0;s->overflow=0;
+			; SOURCE LINE # 29
+	MOV  	DPTR,#02H
+	MOV  	B,A
+	LCALL	?C?ISTOPTR
+	MOV  	DPTR,#08H
+	CLR  	A
+	LCALL	?C?CSTOPTR
+	MOV  	DPTR,#09H
+	CLR  	A
+	LCALL	?C?CSTOPTR
+;         s->matched=0;s->blink_ms=0;s->blink_on=1;
+			; SOURCE LINE # 30
+	MOV  	DPTR,#0AH
+	CLR  	A
+	LCALL	?C?CSTOPTR
+	MOV  	DPTR,#04H
+	CLR  	A
+	MOV  	B,A
+	LCALL	?C?ISTOPTR
+	MOV  	DPTR,#0BH
+	MOV  	A,#01H
+	LCALL	?C?CSTOPTR
+;         s->state=SW_READY;
+			; SOURCE LINE # 31
+	MOV  	DPTR,#06H
+	MOV  	A,#01H
+?C0027:
+	LCALL	?C?CSTOPTR
+;     }
+			; SOURCE LINE # 32
+; }
+			; SOURCE LINE # 33
+?C0013:
+	RET  	
+; END OF _sw_control
+
+; void sw_tick(volatile Stopwatch *s)
+
+	RSEG  ?PR?_sw_tick?STOPWATCH
+_sw_tick:
+	USING	0
+			; SOURCE LINE # 34
+;---- Variable 's?445' assigned to Register 'R1/R2/R3' ----
+; {
+			; SOURCE LINE # 35
+;     if(s->state==SW_RUNNING) {
+			; SOURCE LINE # 36
+	MOV  	DPTR,#06H
+	LCALL	?C?CLDOPTR
+	XRL  	A,#02H
+	JNZ  	?C0014
+;         if(++s->sub_ms==10) {
+			; SOURCE LINE # 37
+	MOV  	DPTR,#08H
+	INC  	A
+	LCALL	?C?CILDOPTR
+	XRL  	A,#0AH
+	JNZ  	?C0023
+;             s->sub_ms=0;
+			; SOURCE LINE # 38
+	MOV  	DPTR,#08H
+	LCALL	?C?CSTOPTR
+;             if(s->elapsed<9999) ++s->elapsed;
+			; SOURCE LINE # 39
+	MOV  	DPTR,#02H
+	LCALL	?C?ILDOPTR
+	CLR  	C
+	SUBB 	A,#0FH
+	MOV  	A,B
+	SUBB 	A,#027H
+	JNC  	?C0016
+	MOV  	DPTR,#02H
+	CLR  	A
+	MOV  	B,#01H
+	LJMP 	?C?IILDOPTR
+?C0016:
+;             else s->overflow=1;
+			; SOURCE LINE # 40
+	MOV  	DPTR,#09H
+	MOV  	A,#01H
+;         }
+			; SOURCE LINE # 41
+;     } else if(s->state==SW_STOPPED && s->matched) {
+			; SOURCE LINE # 42
+	SJMP 	?C0028
+?C0014:
+	MOV  	DPTR,#06H
+	LCALL	?C?CLDOPTR
+	XRL  	A,#03H
+	JNZ  	?C0023
+	MOV  	DPTR,#0AH
+	LCALL	?C?CLDOPTR
+	JZ   	?C0023
+;         if(++s->blink_ms==500) {
+			; SOURCE LINE # 43
+	MOV  	DPTR,#04H
+	CLR  	A
+	MOV  	B,#01H
+	LCALL	?C?IILDOPTR
+	MOV  	R6,A
+	MOV  	A,B
+	XRL  	A,#0F4H
+	JNZ  	?C0025
+	MOV  	A,R6
+	XRL  	A,#01H
+?C0025:
+	JNZ  	?C0023
+;             s->blink_ms=0;s->blink_on=!s->blink_on;
+			; SOURCE LINE # 44
+	MOV  	DPTR,#04H
+	MOV  	B,A
+	LCALL	?C?ISTOPTR
+	MOV  	DPTR,#0BH
+	LCALL	?C?CLDOPTR
+	JNZ  	?C0021
+	MOV  	R7,#01H
+	SJMP 	?C0022
+?C0021:
+	MOV  	R7,#00H
+?C0022:
+	MOV  	DPTR,#0BH
+	MOV  	A,R7
+?C0028:
+	LCALL	?C?CSTOPTR
+;         }
+			; SOURCE LINE # 45
+;     }
+			; SOURCE LINE # 46
+; }
+			; SOURCE LINE # 47
+?C0023:
+	RET  	
+; END OF _sw_tick
+
+	END

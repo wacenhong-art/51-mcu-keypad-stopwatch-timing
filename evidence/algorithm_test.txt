@@ -1,0 +1,1 @@
+PASS: input/confirm, 10ms quantization, 3-state control, 500ms blink, mismatch, overflow, reset, 10000 targets
