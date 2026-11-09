@@ -1,6 +1,7 @@
 {
+  "name": "experiment2-report-tools",
   "private": true,
   "dependencies": {
-    "docx": "^9.15.3"
+    "docx": "9.15.3"
   }
 }
