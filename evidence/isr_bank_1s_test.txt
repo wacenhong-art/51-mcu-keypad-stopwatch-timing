@@ -1,0 +1,1 @@
+PASS: Timer0 ISR and key/tick callees use one register bank; no bank-1 to bank-0 calls

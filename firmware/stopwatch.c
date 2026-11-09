@@ -40,7 +40,8 @@ void sw_tick(volatile Stopwatch *s)
             else s->overflow=1;
         }
     } else if(s->state==SW_STOPPED && s->matched) {
-        if(++s->blink_ms==500) {
+        /* Teacher requirement: 1000 nominal 1ms ticks per phase. */
+        if(++s->blink_ms==1000) {
             s->blink_ms=0;s->blink_on=!s->blink_on;
         }
     }

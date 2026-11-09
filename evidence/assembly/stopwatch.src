@@ -1,6 +1,6 @@
-; C:/Users/ROG/Documents/Codex/2026-11-02/new-chat/work/exp2_stopwatch.src generated from: stopwatch.c
+; C:/Users/ROG/Documents/实验二_键盘独立按键与数码管的秒表定时实验/evidence/assembly/stopwatch.src generated from: stopwatch.c
 ; COMPILER INVOKED BY:
-;        D:\keil-C51\C51\BIN\C51.exe stopwatch.c SRC(C:/Users/ROG/Documents/Codex/2026-11-02/new-chat/work/exp2_stopwatch.src)
+;        D:\keil-C51\C51\BIN\C51.exe stopwatch.c SRC(C:/Users/ROG/Documents/实验二_键盘独立按键与数码管的秒表定时实验/evidence/assembly/stopwatch.src)
 
 
 NAME	STOPWATCH
@@ -340,22 +340,23 @@ _sw_tick:
 	MOV  	DPTR,#0AH
 	LCALL	?C?CLDOPTR
 	JZ   	?C0023
-;         if(++s->blink_ms==500) {
-			; SOURCE LINE # 43
+;         /* Teacher requirement: 1000 nominal 1ms ticks per phase. */
+;         if(++s->blink_ms==1000) {
+			; SOURCE LINE # 44
 	MOV  	DPTR,#04H
 	CLR  	A
 	MOV  	B,#01H
 	LCALL	?C?IILDOPTR
 	MOV  	R6,A
 	MOV  	A,B
-	XRL  	A,#0F4H
+	XRL  	A,#0E8H
 	JNZ  	?C0025
 	MOV  	A,R6
-	XRL  	A,#01H
+	XRL  	A,#03H
 ?C0025:
 	JNZ  	?C0023
 ;             s->blink_ms=0;s->blink_on=!s->blink_on;
-			; SOURCE LINE # 44
+			; SOURCE LINE # 45
 	MOV  	DPTR,#04H
 	MOV  	B,A
 	LCALL	?C?ISTOPTR
@@ -372,11 +373,11 @@ _sw_tick:
 ?C0028:
 	LCALL	?C?CSTOPTR
 ;         }
-			; SOURCE LINE # 45
-;     }
 			; SOURCE LINE # 46
-; }
+;     }
 			; SOURCE LINE # 47
+; }
+			; SOURCE LINE # 48
 ?C0023:
 	RET  	
 ; END OF _sw_tick

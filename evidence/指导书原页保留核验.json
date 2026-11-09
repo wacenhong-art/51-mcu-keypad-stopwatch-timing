@@ -1,0 +1,13 @@
+{
+  "pages": 5,
+  "source_pages": [
+    4,
+    5,
+    6
+  ],
+  "page_1": "Original PDF content stream is byte-identical",
+  "page_2": "Text equals original after replacing only two 0.5s values with 1s",
+  "page_3": "All original text preserved, answers added below in original blank area",
+  "supplement_pages": 2,
+  "new_blink_ms": 1000
+}

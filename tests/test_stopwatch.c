@@ -21,8 +21,10 @@ int main(void)
     sw_control(&s);ticks(9);assert(s.elapsed==0);ticks(1);assert(s.elapsed==1);
     ticks(1220);sw_control(&s);
     assert(s.state==SW_STOPPED && s.elapsed==123 && s.matched && s.blink_on);
+    ticks(500);assert(s.blink_on); /* Must not toggle at the old boundary. */
     ticks(499);assert(s.blink_on);ticks(1);assert(!s.blink_on);
-    ticks(500);assert(s.blink_on);assert(s.elapsed==123);
+    ticks(999);assert(!s.blink_on);ticks(1);assert(s.blink_on);
+    assert(s.elapsed==123);
     sw_control(&s);assert(s.state==SW_READY && s.target==123 && !s.matched && s.elapsed==0);
     sw_control(&s);ticks(1220);sw_control(&s);assert(!s.matched && s.elapsed==122);
     ticks(2000);assert(s.blink_on && s.elapsed==122);
@@ -40,6 +42,6 @@ int main(void)
     assert(s.elapsed==9999 && s.matched && !s.overflow);
     target(100);sw_control(&s);ticks(1000);assert(s.elapsed==100);
     sw_reset(&s);assert(s.state==SW_INPUT && s.count==0 && !s.matched);
-    puts("PASS: input/confirm, 10ms quantization, 3-state control, 500ms blink, mismatch, overflow, reset, 10000 targets");
+    puts("PASS: input/confirm, 10ms quantization, 3-state control, 1000ms blink (500/999/1000 boundary checked), mismatch, overflow, reset, 10000 targets");
     return 0;
 }
